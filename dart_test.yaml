@@ -1,0 +1,5 @@
+# Test tags. `slow` marks tests that do real work (RSA keygen, TLS handshakes).
+# Run only fast tests with:  flutter test --exclude-tags slow
+tags:
+  slow:
+    description: Slower tests (crypto keygen, real sockets/TLS).

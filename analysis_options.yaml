@@ -1,0 +1,19 @@
+# Sharely lint configuration.
+# very_good_analysis is the project standard (see PROMPT.md §3).
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "lib/l10n/generated/**"
+  errors:
+    todo: ignore
+
+linter:
+  rules:
+    # public_member_api_docs is noisy for an application (not a package).
+    public_member_api_docs: false
+    lines_longer_than_80_chars: false
+    # Keeping the `flutter` SDK entry first is idiomatic; this rule fights it.
+    sort_pub_dependencies: false

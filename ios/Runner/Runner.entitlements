@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- iOS 14+ requires this entitlement for multicast/UDP discovery. It needs
+	     an approval request submitted to Apple against the bundle id
+	     (com.sunny.sharely) — see PROMPT.md §8. Until granted, discovery falls
+	     back to the subnet scan + manual IP entry. This file must be wired into
+	     the Runner target as CODE_SIGN_ENTITLEMENTS in Xcode. -->
+	<key>com.apple.developer.networking.multicast</key>
+	<true/>
+</dict>
+</plist>
