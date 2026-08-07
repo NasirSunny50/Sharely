@@ -79,11 +79,17 @@ class ReceivingFile {
       // ignore close errors during abort
     }
     final target = _target;
-    if (target != null && target.existsSync()) {
+    if (target == null) return;
+    // Delete the partial file. On Windows the OS can briefly hold the handle
+    // after close(), so retry a few times before giving up — the §6.4.3
+    // partial-cleanup guarantee shouldn't lose to a transient lock.
+    for (var attempt = 0; attempt < 5; attempt++) {
+      if (!target.existsSync()) return;
       try {
         await target.delete();
+        return;
       } on Object {
-        // best-effort cleanup
+        await Future<void>.delayed(const Duration(milliseconds: 30));
       }
     }
   }
