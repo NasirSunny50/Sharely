@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:ital,wght@0,400..700;1,400&family=Martian+Mono:wght@400;500;600&family=Anek+Bangla:wght@400..700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#DCD6C8; }
+  a { color:#C33C15; text-decoration:none; }
+  a:hover { color:#8E2A0D; }
+  @keyframes sh-pulse { 0%,100% { opacity:1; transform:scale(1);} 50% { opacity:.35; transform:scale(.7);} }
+  @keyframes sh-sweep { 0% { transform:translateX(-100%);} 100% { transform:translateX(240%);} }
+  @keyframes sh-fly { 0% { transform:translate3d(0,0,0) rotateZ(-9deg) rotateY(18deg) scale(.82); opacity:0; }
+    10% { opacity:1; }
+    50% { transform:translate3d(96px,-124px,0) rotateZ(5deg) rotateY(-8deg) scale(1.04); opacity:1; }
+    88% { opacity:1; }
+    100% { transform:translate3d(198px,-226px,0) rotateZ(15deg) rotateY(22deg) scale(.66); opacity:0; } }
+  @keyframes sh-landA { 0% { transform:rotate(-11deg) translate(-16px,-30px); opacity:0; } 100% { transform:rotate(-11deg) translate(-16px,10px); opacity:1; } }
+  @keyframes sh-landB { 0% { transform:rotate(4deg) translate(12px,-34px); opacity:0; } 100% { transform:rotate(4deg) translate(12px,0); opacity:1; } }
+  @keyframes sh-landC { 0% { transform:rotate(-2deg) translate(0,-40px); opacity:0; } 100% { transform:rotate(-2deg) translate(0,-8px); opacity:1; } }
+  @keyframes sh-stamp { 0% { transform:rotate(-14deg) scale(1.9); opacity:0; } 60% { transform:rotate(-9deg) scale(.96); opacity:1; } 100% { transform:rotate(-9deg) scale(1); opacity:1; } }
+  @keyframes sh-breathe { 0%,100% { transform:scale(1); opacity:.55; } 50% { transform:scale(1.14); opacity:.15; } }
+  @media (prefers-reduced-motion: reduce) {
+    [style*="sh-fly"], [style*="sh-land"], [style*="sh-stamp"], [style*="sh-sweep"], [style*="sh-breathe"] { animation-duration:.01ms !important; animation-iteration-count:1 !important; }
+  }
+</style>
+</helmet>
+<section style="padding:72px 64px 40px; display:flex; flex-direction:column; gap:30px; font-family:'Familjen Grotesk',system-ui,sans-serif; color:#14120F;">
+  <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap;">
+    <span style="font-family:'Martian Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.08em; background:#C33C15; color:#FFF6F2; padding:5px 9px; border-radius:5px;">2a</span>
+    <h1 style="margin:0; font-size:30px; font-weight:600; letter-spacing:-.02em;">Sharely — live prototype, brand, icons</h1>
+    <span style="font-size:15px; color:#6B6459;">Tap anything. Every tile, row and button lands somewhere.</span>
+  </div>
+
+  <div style="display:flex; gap:56px; align-items:flex-start; flex-wrap:wrap;">
+
+    <!-- ===== INTERACTIVE PHONE ===== -->
+    <div id="2a" style="display:flex; flex-direction:column; gap:14px;">
+      <div style="width:390px; height:844px; border-radius:46px; background:#F4F1EA; box-shadow:0 2px 3px rgba(20,18,15,.10), 0 40px 80px -26px rgba(20,18,15,.45), 0 0 0 10px #14120F; overflow:hidden; position:relative; display:flex; flex-direction:column;">
+        <div style="height:52px; padding:0 30px 6px; display:flex; align-items:flex-end; justify-content:space-between; font-family:'Martian Mono',monospace; font-size:12px; font-weight:500;">
+          <span>9:41</span><span style="letter-spacing:-.04em;">Wi-Fi · 84%</span>
+        </div>
+
+        <!-- HOME -->
+        <sc-if value="{{ onHome }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+            <div style="padding:14px 24px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="width:34px; height:34px; border-radius:9px; background:#14120F; display:grid; place-items:center; box-shadow:0 2px 0 #C33C15;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F4F1EA" stroke-width="2" stroke-linecap="square"><path d="M4 9h11M11 5l4 4-4 4"></path><path d="M20 15H9M13 19l-4-4 4-4"></path></svg>
+                </span>
+                <div style="display:flex; flex-direction:column;">
+                  <span style="font-size:19px; font-weight:700; letter-spacing:-.03em;">Sharely</span>
+                  <span style="font-size:11.5px; color:#8C8477; letter-spacing:-.01em;">{{ deviceName }}</span>
+                </div>
+              </div>
+              <button onClick="{{ goSettings }}" style="height:36px; padding:0 12px; display:flex; align-items:center; gap:7px; border:1px solid #CBD9C4; background:#EAF0E7; border-radius:18px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif;" style-hover="background:#DFE9DA">
+                <span style="width:8px; height:8px; border-radius:50%; background:#3E7B33; animation:sh-pulse 1.8s ease-in-out infinite;"></span>
+                <span style="font-size:13px; font-weight:500; color:#2E5C26;">{{ statusLabel }}</span>
+              </button>
+            </div>
+
+            <!-- signature radar-free discovery field -->
+            <div style="margin:18px 24px 0; height:96px; border-radius:20px; background:linear-gradient(#FFFFFF,#F7F4EC); border:1px solid #E4DED1; position:relative; overflow:hidden; display:flex; align-items:center; padding:0 18px; gap:14px;">
+              <span style="position:absolute; left:-30px; top:50%; width:130px; height:130px; margin-top:-65px; border-radius:50%; border:1px solid #E9CEC3; animation:sh-breathe 3.2s ease-in-out infinite;"></span>
+              <span style="position:absolute; left:0px; top:50%; width:70px; height:70px; margin-top:-35px; border-radius:50%; border:1px solid #E9CEC3; animation:sh-breathe 3.2s ease-in-out .4s infinite;"></span>
+              <span style="width:44px; height:44px; border-radius:12px; background:#14120F; color:#F4F1EA; display:grid; place-items:center; font-family:'Martian Mono',monospace; font-size:11px; font-weight:600; z-index:1; box-shadow:0 3px 8px -2px rgba(20,18,15,.5);">YOU</span>
+              <div style="display:flex; flex-direction:column; gap:2px; z-index:1;">
+                <span style="font-size:15px; font-weight:600; letter-spacing:-.01em;">On Home_5G, visible to 3 devices</span>
+                <span style="font-size:13px; color:#6B6459;">Nothing you send leaves this network.</span>
+              </div>
+            </div>
+
+            <div style="padding:20px 24px 10px; display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-size:17px; font-weight:600; letter-spacing:-.01em;">Nearby devices</span>
+              <span style="font-family:'Martian Mono',monospace; font-size:11px; font-weight:500; color:#8C8477;">{{ scanLabel }}</span>
+            </div>
+
+            <div style="padding:0 24px; display:flex; flex-direction:column; gap:14px;">
+              <sc-for list="{{ devices }}" as="d" hint-placeholder-count="3">
+                <button onClick="{{ d.pick }}" style="position:relative; text-align:left; width:100%; background:#FFFFFF; border:1px solid #E4DED1; border-radius:18px; padding:13px 14px; display:flex; align-items:center; gap:13px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif; box-shadow:0 1px 2px rgba(20,18,15,.06);" style-after="content:''; position:absolute; left:9px; right:9px; bottom:-5px; height:10px; border:1px solid #E4DED1; border-top:none; border-radius:0 0 16px 16px; background:#EFEADD; z-index:-1" style-hover="transform:translateY(-1px)">
+                  <span style="width:46px; height:46px; border-radius:13px; background:#EDE8DC; display:grid; place-items:center; border:1px solid #E1DACB;">
+                    <sc-if value="{{ d.isPhone }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><rect x="7" y="3" width="10" height="18" rx="2"></rect><path d="M10 18h4"></path></svg></sc-if>
+                    <sc-if value="{{ d.isLaptop }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><rect x="3" y="5" width="18" height="11"></rect><path d="M2 19h20"></path></svg></sc-if>
+                    <sc-if value="{{ d.isDesktop }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M9 20h6M12 16v4"></path></svg></sc-if>
+                  </span>
+                  <span style="flex:1; display:flex; flex-direction:column; gap:2px; min-width:0;">
+                    <span style="display:flex; align-items:center; gap:7px;">
+                      <span style="font-size:16px; font-weight:600; letter-spacing:-.01em;">{{ d.name }}</span>
+                      <sc-if value="{{ d.fav }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Martian Mono',monospace; font-size:9px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#C33C15; border:1px solid #EFC9BC; background:#FCEFEA; border-radius:4px; padding:2px 5px;">Favourite</span></sc-if>
+                    </span>
+                    <span style="font-size:13px; color:#6B6459; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ d.meta }}</span>
+                  </span>
+                  <span style="display:flex; flex-direction:column; align-items:flex-end; gap:5px;">
+                    <span style="display:flex; align-items:flex-end; gap:2.5px; height:15px;">
+                      <span style="width:4px; height:6px; border-radius:1px; background:#14120F;"></span>
+                      <span style="width:4px; height:10px; border-radius:1px; background:#14120F;"></span>
+                      <span style="width:4px; height:15px; border-radius:1px; background:#DAD3C4;"></span>
+                    </span>
+                    <span style="font-family:'Martian Mono',monospace; font-size:10px; font-weight:500; color:#6B6459;">{{ d.link }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+
+            <div style="flex:1;"></div>
+
+            <div style="padding:0 24px 8px; display:flex; flex-direction:column; gap:10px;">
+              <button onClick="{{ goHub }}" style="height:58px; border:none; border-radius:16px; background:#C33C15; color:#FFF6F2; font-family:'Familjen Grotesk',sans-serif; font-size:18px; font-weight:600; letter-spacing:-.01em; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 4px 0 #8E2A0D, 0 12px 22px -10px rgba(195,60,21,.7);" style-active="transform:translateY(3px); box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 1px 0 #8E2A0D">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFF6F2" stroke-width="2" stroke-linecap="square"><path d="M12 20V5M6 11l6-6 6 6"></path></svg>
+                Send something
+              </button>
+              <button onClick="{{ goIncoming }}" style="height:52px; border:1px solid #DCD5C7; border-radius:16px; background:transparent; color:#3A342B; font-family:'Familjen Grotesk',sans-serif; font-size:16px; font-weight:500; cursor:pointer;" style-hover="background:#EDE8DC">Wait for someone to send</button>
+            </div>
+
+            <div style="height:74px; padding:0 20px; display:flex; align-items:center; border-top:1px solid #E4DED1; margin-top:10px;">
+              <button onClick="{{ goHistory }}" style="flex:1; height:54px; border:none; background:transparent; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif;" style-hover="opacity:.6">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><path d="M12 7v5l4 2"></path><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 4v4h4"></path></svg>
+                <span style="font-size:11px; font-weight:500;">History</span>
+              </button>
+              <button onClick="{{ goHistory }}" style="flex:1; height:54px; border:none; background:transparent; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif;" style-hover="opacity:.6">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><path d="M12 4l2.4 5 5.6.7-4 3.9 1 5.4-5-2.7-5 2.7 1-5.4-4-3.9 5.6-.7z"></path></svg>
+                <span style="font-size:11px; font-weight:500;">Favourites</span>
+              </button>
+              <button onClick="{{ goSettings }}" style="flex:1; height:54px; border:none; background:transparent; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif;" style-hover="opacity:.6">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><circle cx="12" cy="12" r="3"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"></path></svg>
+                <span style="font-size:11px; font-weight:500;">Settings</span>
+              </button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- SEND HUB -->
+        <sc-if value="{{ onHub }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+            <div style="padding:12px 24px 0; display:flex; align-items:center; gap:12px;">
+              <button onClick="{{ goHome }}" style="width:40px; height:40px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:12px; display:grid; place-items:center; cursor:pointer;" style-hover="background:#EDE8DC">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
+              </button>
+              <span style="font-size:20px; font-weight:600; letter-spacing:-.02em;">Send to Rafi's MacBook</span>
+            </div>
+            <div style="padding:22px 24px 0; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <button onClick="{{ goPhotos }}" style="min-height:120px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:18px; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between; gap:12px; padding:14px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif; text-align:left; box-shadow:0 1px 2px rgba(20,18,15,.06);" style-hover="transform:translateY(-2px); box-shadow:0 6px 16px -8px rgba(20,18,15,.3)">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C33C15" stroke-width="1.7" stroke-linecap="square"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 16l5-4 4 3 3-2 6 4"></path><circle cx="15" cy="9" r="1.4"></circle></svg>
+                <span style="display:flex; flex-direction:column; gap:1px;"><span style="font-size:16px; font-weight:600;">Photos &amp; videos</span><span style="font-size:12.5px; color:#6B6459;">2,418 items</span></span>
+              </button>
+              <button onClick="{{ goPhotos }}" style="min-height:120px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:18px; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between; gap:12px; padding:14px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif; text-align:left; box-shadow:0 1px 2px rgba(20,18,15,.06);" style-hover="transform:translateY(-2px); box-shadow:0 6px 16px -8px rgba(20,18,15,.3)">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><path d="M13 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9z"></path><path d="M13 3v6h6"></path></svg>
+                <span style="display:flex; flex-direction:column; gap:1px;"><span style="font-size:16px; font-weight:600;">Files</span><span style="font-size:12.5px; color:#6B6459;">Browse storage</span></span>
+              </button>
+              <button onClick="{{ goPhotos }}" style="min-height:120px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:18px; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between; gap:12px; padding:14px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif; text-align:left; box-shadow:0 1px 2px rgba(20,18,15,.06);" style-hover="transform:translateY(-2px); box-shadow:0 6px 16px -8px rgba(20,18,15,.3)">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><path d="M3 7h6l2 2h10v10H3z"></path></svg>
+                <span style="display:flex; flex-direction:column; gap:1px;"><span style="font-size:16px; font-weight:600;">Folders</span><span style="font-size:12.5px; color:#6B6459;">Whole tree, nothing zipped</span></span>
+              </button>
+              <button onClick="{{ goPhotos }}" style="min-height:120px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:18px; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between; gap:12px; padding:14px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif; text-align:left; box-shadow:0 1px 2px rgba(20,18,15,.06);" style-hover="transform:translateY(-2px); box-shadow:0 6px 16px -8px rgba(20,18,15,.3)">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></svg>
+                <span style="display:flex; flex-direction:column; gap:1px;"><span style="font-size:16px; font-weight:600;">Apps</span><span style="font-size:12.5px; color:#6B6459;">APK, Android only</span></span>
+              </button>
+            </div>
+            <div style="padding:12px 24px 0;">
+              <button onClick="{{ goPhotos }}" style="width:100%; min-height:68px; border:1px dashed #CFC7B6; background:#F7F4EC; border-radius:18px; display:flex; align-items:center; gap:12px; padding:12px 16px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif; text-align:left;" style-hover="background:#EDE8DC">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="1.7" stroke-linecap="square"><path d="M5 6h14M5 11h14M5 16h8"></path></svg>
+                <span style="display:flex; flex-direction:column;"><span style="font-size:15.5px; font-weight:600;">Send text</span><span style="font-size:12.5px; color:#6B6459;">Type it, or send what's on your clipboard</span></span>
+              </button>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="margin:0 24px 28px; padding:14px 16px; border-radius:16px; background:#FCEFEA; border:1px solid #EFC9BC;">
+              <span style="font-size:13.5px; color:#8E2A0D; line-height:1.5;">Rafi's MacBook is a favourite, so nothing will need approving on the other end.</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- PHOTO PICKER -->
+        <sc-if value="{{ onPhotos }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+            <div style="padding:12px 24px 0; display:flex; align-items:center; gap:12px;">
+              <button onClick="{{ goHub }}" style="width:40px; height:40px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:12px; display:grid; place-items:center; cursor:pointer;" style-hover="background:#EDE8DC">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
+              </button>
+              <span style="font-size:20px; font-weight:600; letter-spacing:-.02em;">Camera roll</span>
+              <span style="flex:1;"></span>
+              <span style="font-family:'Martian Mono',monospace; font-size:11px; color:#6B6459;">Aug 2026</span>
+            </div>
+            <div style="padding:16px 24px 0; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; overflow:hidden;">
+              <sc-for list="{{ photos }}" as="p" hint-placeholder-count="9">
+                <button onClick="{{ p.toggle }}" style="position:relative; aspect-ratio:1; border:none; padding:0; border-radius:12px; overflow:hidden; cursor:pointer; background:#EDE8DC;">
+                  <span style="position:absolute; inset:0; background:linear-gradient(150deg,#DFD8C8,#C9C0AC 60%,#B6AC97);"></span>
+                  <span style="position:absolute; left:6px; bottom:6px; padding:2px 5px; border-radius:5px; background:rgba(20,18,15,.78); font-family:'Martian Mono',monospace; font-size:9px; color:#F4F1EA;">{{ p.size }}</span>
+                  <sc-if value="{{ p.sel }}" hint-placeholder-val="{{ false }}">
+                    <span style="position:absolute; inset:0; border:3px solid #C33C15; border-radius:12px; background:rgba(195,60,21,.14);"></span>
+                    <span style="position:absolute; right:6px; top:6px; width:22px; height:22px; border-radius:50%; background:#C33C15; display:grid; place-items:center;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFF6F2" stroke-width="3" stroke-linecap="square"><path d="M5 13l4 4 10-10"></path></svg>
+                    </span>
+                  </sc-if>
+                </button>
+              </sc-for>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="padding:16px 24px 28px; background:#F4F1EA; border-top:1px solid #E4DED1; display:flex; align-items:center; gap:14px;">
+              <span style="display:flex; flex-direction:column; gap:2px;">
+                <span style="font-size:15px; font-weight:600;">{{ countLabel }}</span>
+                <span style="font-family:'Martian Mono',monospace; font-size:12px; color:#6B6459; font-variant-numeric:tabular-nums;">{{ sizeLabel }}</span>
+              </span>
+              <span style="flex:1;"></span>
+              <button onClick="{{ goReview }}" style="height:52px; padding:0 22px; border:none; border-radius:14px; background:#C33C15; color:#FFF6F2; font-family:'Familjen Grotesk',sans-serif; font-size:16.5px; font-weight:600; cursor:pointer; box-shadow:0 3px 0 #8E2A0D;" style-active="transform:translateY(2px); box-shadow:0 1px 0 #8E2A0D">Review</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- REVIEW -->
+        <sc-if value="{{ onReview }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+            <div style="padding:12px 24px 0; display:flex; align-items:center; gap:12px;">
+              <button onClick="{{ goPhotos }}" style="width:40px; height:40px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:12px; display:grid; place-items:center; cursor:pointer;" style-hover="background:#EDE8DC">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
+              </button>
+              <span style="font-size:20px; font-weight:600; letter-spacing:-.02em;">Ready to send</span>
+            </div>
+
+            <div style="margin:20px 24px 0; padding:18px; border-radius:20px; background:#14120F; color:#F4F1EA; display:flex; align-items:center; gap:14px; box-shadow:0 12px 26px -14px rgba(20,18,15,.7);">
+              <span style="width:46px; height:46px; border-radius:13px; background:#211E19; display:grid; place-items:center; font-family:'Martian Mono',monospace; font-size:14px; font-weight:600; color:#F4F1EA;">MB</span>
+              <span style="display:flex; flex-direction:column; gap:2px; flex:1;">
+                <span style="font-family:'Martian Mono',monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:#9C9384;">Going to</span>
+                <span style="font-size:17px; font-weight:600;">Rafi's MacBook</span>
+              </span>
+              <button onClick="{{ goHome }}" style="height:36px; padding:0 13px; border:1px solid #3A342B; background:transparent; border-radius:10px; color:#EDE6D8; font-family:'Familjen Grotesk',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer;" style-hover="background:#211E19">Change</button>
+            </div>
+
+            <div style="padding:22px 24px 8px; display:flex; align-items:baseline; justify-content:space-between;">
+              <span style="font-size:16px; font-weight:600;">{{ countLabel }}</span>
+              <span style="font-family:'Martian Mono',monospace; font-size:12px; color:#6B6459; font-variant-numeric:tabular-nums;">{{ sizeLabel }}</span>
+            </div>
+            <div style="padding:0 24px; display:flex; flex-direction:column; gap:8px;">
+              <sc-for list="{{ picked }}" as="f" hint-placeholder-count="3">
+                <div style="background:#FFFFFF; border:1px solid #E4DED1; border-radius:14px; padding:11px 13px; display:flex; align-items:center; gap:12px;">
+                  <span style="width:38px; height:38px; border-radius:10px; background:linear-gradient(150deg,#DFD8C8,#C0B7A2);"></span>
+                  <span style="flex:1; display:flex; flex-direction:column; gap:1px; min-width:0;">
+                    <span style="font-size:14.5px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ f.name }}</span>
+                    <span style="font-family:'Martian Mono',monospace; font-size:11px; color:#8C8477;">{{ f.size }}</span>
+                  </span>
+                  <button onClick="{{ f.remove }}" style="width:34px; height:34px; border:1px solid #E4DED1; background:#F7F4EC; border-radius:10px; display:grid; place-items:center; cursor:pointer;" style-hover="background:#EDE8DC">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B6459" stroke-width="2.2" stroke-linecap="square"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+                  </button>
+                </div>
+              </sc-for>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="padding:0 24px 30px;">
+              <button onClick="{{ startSend }}" style="width:100%; height:60px; border:none; border-radius:16px; background:#C33C15; color:#FFF6F2; font-family:'Familjen Grotesk',sans-serif; font-size:18px; font-weight:600; cursor:pointer; box-shadow:0 4px 0 #8E2A0D, 0 14px 26px -12px rgba(195,60,21,.7);" style-active="transform:translateY(3px); box-shadow:0 1px 0 #8E2A0D">Send</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- SENDING — signature moment -->
+        <sc-if value="{{ onSending }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0; background:linear-gradient(#F4F1EA 40%,#EAE5D8);">
+            <div style="padding:12px 24px 0; display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-size:20px; font-weight:600; letter-spacing:-.02em;">Sending</span>
+              <button onClick="{{ goHome }}" style="height:36px; padding:0 14px; border:1px solid #DCD5C7; background:transparent; border-radius:12px; font-family:'Familjen Grotesk',sans-serif; font-size:13.5px; font-weight:500; color:#3A342B; cursor:pointer;" style-hover="background:#EDE8DC">Cancel</button>
+            </div>
+
+            <div style="height:300px; margin:10px 16px 0; position:relative; perspective:900px; overflow:hidden;">
+              <span style="position:absolute; left:64px; bottom:64px; width:206px; height:0; border-top:2px dashed #DCD2BF; transform:rotate(-49deg); transform-origin:left center;"></span>
+              <span style="position:absolute; left:20px; bottom:24px; width:76px; height:96px; border-radius:14px; background:linear-gradient(#211E19,#14120F); box-shadow:0 10px 20px -8px rgba(20,18,15,.6); display:grid; place-items:end center; padding-bottom:9px;">
+                <span style="font-family:'Martian Mono',monospace; font-size:9px; letter-spacing:.1em; color:#9C9384;">YOU</span>
+              </span>
+              <span style="position:absolute; right:20px; top:14px; width:150px; height:98px; border-radius:12px; background:linear-gradient(#FFFFFF,#EFEADD); border:1px solid #DCD5C7; box-shadow:0 14px 26px -14px rgba(20,18,15,.5); display:grid; place-items:end center; padding-bottom:8px;">
+                <span style="font-family:'Martian Mono',monospace; font-size:9px; letter-spacing:.1em; color:#8C8477;">MACBOOK</span>
+              </span>
+              <span style="position:absolute; left:34px; bottom:118px; width:104px; height:74px; border-radius:10px; background:linear-gradient(155deg,#FFFFFF,#E3DCCB); border:1px solid #D6CDB9; box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 12px 18px -10px rgba(20,18,15,.55); animation:sh-fly 2.1s cubic-bezier(.4,.05,.3,1) infinite; transform-style:preserve-3d;"></span>
+              <span style="position:absolute; left:34px; bottom:118px; width:104px; height:74px; border-radius:10px; background:linear-gradient(155deg,#FFFFFF,#E3DCCB); border:1px solid #D6CDB9; box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 12px 18px -10px rgba(20,18,15,.55); animation:sh-fly 2.1s cubic-bezier(.4,.05,.3,1) .7s infinite;"></span>
+              <span style="position:absolute; left:34px; bottom:118px; width:104px; height:74px; border-radius:10px; background:linear-gradient(155deg,#FCEFEA,#EBC4B4); border:1px solid #E3B6A6; box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 12px 18px -10px rgba(20,18,15,.55); animation:sh-fly 2.1s cubic-bezier(.4,.05,.3,1) 1.4s infinite;"></span>
+            </div>
+
+            <div style="padding:6px 24px 0; display:flex; align-items:flex-end; gap:8px;">
+              <span style="font-family:'Martian Mono',monospace; font-size:44px; font-weight:600; letter-spacing:-.05em; font-variant-numeric:tabular-nums; line-height:1;">{{ pct }}</span>
+              <span style="font-family:'Martian Mono',monospace; font-size:16px; color:#8C8477; padding-bottom:4px;">%</span>
+              <span style="flex:1;"></span>
+              <span style="display:flex; flex-direction:column; align-items:flex-end; gap:2px; font-family:'Martian Mono',monospace; font-variant-numeric:tabular-nums;">
+                <span style="font-size:14px; font-weight:500; width:112px; text-align:right;">{{ speed }}</span>
+                <span style="font-size:12px; color:#6B6459; width:112px; text-align:right;">{{ eta }}</span>
+              </span>
+            </div>
+            <div style="margin:12px 24px 0; height:8px; border-radius:4px; background:#E2DCCF; overflow:hidden;">
+              <span style="display:block; height:100%; background:#C33C15; width:{{ pct }}%;"></span>
+            </div>
+
+            <div style="padding:18px 24px 0; display:flex; flex-direction:column; gap:9px;">
+              <sc-for list="{{ rows }}" as="r" hint-placeholder-count="3">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <span style="width:30px; height:30px; border-radius:8px; background:linear-gradient(150deg,#DFD8C8,#C0B7A2); flex:none;"></span>
+                  <span style="flex:1; display:flex; flex-direction:column; gap:5px; min-width:0;">
+                    <span style="display:flex; justify-content:space-between; gap:10px;">
+                      <span style="font-size:13.5px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.name }}</span>
+                      <span style="font-family:'Martian Mono',monospace; font-size:11px; color:#6B6459; font-variant-numeric:tabular-nums; flex:none;">{{ r.state }}</span>
+                    </span>
+                    <span style="height:4px; border-radius:2px; background:#E2DCCF; overflow:hidden;"><span style="display:block; height:100%; background:#14120F; width:{{ r.pct }}%;"></span></span>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="flex:1;"></div>
+            <span style="padding:0 24px 28px; font-size:12.5px; color:#8C8477;">Keep both screens on and stay on Home_5G.</span>
+          </div>
+        </sc-if>
+
+        <!-- COMPLETE -->
+        <sc-if value="{{ onDone }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0; background:linear-gradient(#F7F4EC,#EFEADD);">
+            <div style="height:322px; position:relative; display:grid; place-items:center;">
+              <span style="position:absolute; width:150px; height:104px; border-radius:12px; background:linear-gradient(155deg,#FFFFFF,#E7E0CF); border:1px solid #D6CDB9; box-shadow:0 14px 24px -14px rgba(20,18,15,.5); animation:sh-landA .5s cubic-bezier(.2,.8,.2,1) both;"></span>
+              <span style="position:absolute; width:150px; height:104px; border-radius:12px; background:linear-gradient(155deg,#FFFFFF,#E7E0CF); border:1px solid #D6CDB9; box-shadow:0 14px 24px -14px rgba(20,18,15,.5); animation:sh-landB .5s cubic-bezier(.2,.8,.2,1) .09s both;"></span>
+              <span style="position:absolute; width:150px; height:104px; border-radius:12px; background:linear-gradient(155deg,#FFFFFF,#EFE7D6); border:1px solid #D6CDB9; box-shadow:0 18px 30px -16px rgba(20,18,15,.55); animation:sh-landC .5s cubic-bezier(.2,.8,.2,1) .18s both;"></span>
+              <span style="position:absolute; bottom:56px; right:52px; padding:7px 13px; border:2.5px solid #C33C15; border-radius:8px; color:#C33C15; font-family:'Martian Mono',monospace; font-size:13px; font-weight:600; letter-spacing:.14em; animation:sh-stamp .5s cubic-bezier(.2,.8,.2,1) .5s both;">SENT</span>
+            </div>
+            <div style="padding:0 24px; display:flex; flex-direction:column; gap:8px;">
+              <span style="font-size:28px; font-weight:600; letter-spacing:-.03em; line-height:1.15;">3 files landed on Rafi's MacBook</span>
+              <span style="font-family:'Martian Mono',monospace; font-size:13px; color:#6B6459; font-variant-numeric:tabular-nums;">184.2 MB · 14.6 s · 12.6 MB/s average</span>
+              <span style="font-size:14px; color:#4A443A;">Saved to <span style="font-family:'Martian Mono',monospace; font-size:13px;">~/Downloads/Sharely</span></span>
+            </div>
+            <div style="flex:1;"></div>
+            <div style="padding:0 24px 30px; display:flex; flex-direction:column; gap:10px;">
+              <button onClick="{{ goHub }}" style="height:56px; border:none; border-radius:16px; background:#14120F; color:#F4F1EA; font-family:'Familjen Grotesk',sans-serif; font-size:17px; font-weight:600; cursor:pointer; box-shadow:0 4px 0 #000;" style-active="transform:translateY(3px); box-shadow:0 1px 0 #000">Send something else</button>
+              <button onClick="{{ goHome }}" style="height:52px; border:1px solid #DCD5C7; border-radius:16px; background:transparent; color:#3A342B; font-family:'Familjen Grotesk',sans-serif; font-size:16px; font-weight:500; cursor:pointer;" style-hover="background:#EDE8DC">Done</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- INCOMING REQUEST -->
+        <sc-if value="{{ onIncoming }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0; background:#2A2620;">
+            <div style="flex:1;"></div>
+            <div style="background:#F4F1EA; border-radius:28px 28px 0 0; padding:22px 24px 30px; display:flex; flex-direction:column; gap:16px; box-shadow:0 -20px 40px -20px rgba(0,0,0,.6);">
+              <span style="width:44px; height:4px; border-radius:2px; background:#DCD5C7; align-self:center;"></span>
+              <div style="display:flex; align-items:center; gap:13px;">
+                <span style="width:48px; height:48px; border-radius:13px; background:#EDE8DC; border:1px solid #E1DACB; display:grid; place-items:center; font-family:'Martian Mono',monospace; font-size:14px; font-weight:600;">NS</span>
+                <span style="display:flex; flex-direction:column; gap:2px;">
+                  <span style="font-size:19px; font-weight:600; letter-spacing:-.02em;">Nusrat's Galaxy wants to send 3 files</span>
+                  <span style="font-family:'Martian Mono',monospace; font-size:12px; color:#6B6459;">Phone · Android · 184.2 MB</span>
+                </span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <sc-for list="{{ picked }}" as="f" hint-placeholder-count="3">
+                  <div style="background:#FFFFFF; border:1px solid #E4DED1; border-radius:14px; padding:10px 13px; display:flex; align-items:center; gap:12px;">
+                    <span style="width:36px; height:36px; border-radius:9px; background:linear-gradient(150deg,#DFD8C8,#C0B7A2);"></span>
+                    <span style="flex:1; display:flex; flex-direction:column; min-width:0;">
+                      <span style="font-size:14px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ f.name }}</span>
+                      <span style="font-family:'Martian Mono',monospace; font-size:11px; color:#8C8477;">{{ f.size }}</span>
+                    </span>
+                    <span style="width:24px; height:24px; border-radius:7px; background:#C33C15; display:grid; place-items:center;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF6F2" stroke-width="3" stroke-linecap="square"><path d="M5 13l4 4 10-10"></path></svg>
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+              <span style="font-size:13px; color:#6B6459;">Untick anything you don't want. Files land in Downloads/Sharely.</span>
+              <div style="display:flex; gap:10px;">
+                <button onClick="{{ goHome }}" style="flex:1; height:56px; border:1px solid #DCD5C7; background:transparent; border-radius:16px; font-family:'Familjen Grotesk',sans-serif; font-size:16.5px; font-weight:500; color:#3A342B; cursor:pointer;" style-hover="background:#EDE8DC">Reject</button>
+                <button onClick="{{ startSend }}" style="flex:1.4; height:56px; border:none; border-radius:16px; background:#C33C15; color:#FFF6F2; font-family:'Familjen Grotesk',sans-serif; font-size:17px; font-weight:600; cursor:pointer; box-shadow:0 4px 0 #8E2A0D;" style-active="transform:translateY(3px); box-shadow:0 1px 0 #8E2A0D">Accept 3</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- HISTORY -->
+        <sc-if value="{{ onHistory }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+            <div style="padding:12px 24px 0; display:flex; align-items:center; gap:12px;">
+              <button onClick="{{ goHome }}" style="width:40px; height:40px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:12px; display:grid; place-items:center; cursor:pointer;" style-hover="background:#EDE8DC">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
+              </button>
+              <span style="font-size:20px; font-weight:600; letter-spacing:-.02em;">History</span>
+            </div>
+            <div style="padding:20px 24px 0; display:flex; flex-direction:column; gap:18px;">
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <span style="font-family:'Martian Mono',monospace; font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#8C8477;">Today</span>
+                <sc-for list="{{ history }}" as="h" hint-placeholder-count="3">
+                  <button onClick="{{ goDone }}" style="text-align:left; background:#FFFFFF; border:1px solid #E4DED1; border-radius:16px; padding:13px; display:flex; align-items:center; gap:12px; cursor:pointer; font-family:'Familjen Grotesk',sans-serif;" style-hover="background:#FDFCF8">
+                    <span style="width:34px; height:34px; border-radius:10px; background:#EDE8DC; display:grid; place-items:center;">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#3A342B" stroke-width="2" stroke-linecap="square"><path d="M12 19V6M6 12l6-6 6 6"></path></svg>
+                    </span>
+                    <span style="flex:1; display:flex; flex-direction:column; gap:2px; min-width:0;">
+                      <span style="font-size:15px; font-weight:600;">{{ h.title }}</span>
+                      <span style="font-family:'Martian Mono',monospace; font-size:11.5px; color:#6B6459;">{{ h.meta }}</span>
+                    </span>
+                    <span style="font-size:13px; font-weight:500; color:#2E5C26;">{{ h.state }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1;"></div>
+          </div>
+        </sc-if>
+
+        <!-- SETTINGS -->
+        <sc-if value="{{ onSettings }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+            <div style="padding:12px 24px 0; display:flex; align-items:center; gap:12px;">
+              <button onClick="{{ goHome }}" style="width:40px; height:40px; border:1px solid #E4DED1; background:#FFFFFF; border-radius:12px; display:grid; place-items:center; cursor:pointer;" style-hover="background:#EDE8DC">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
+              </button>
+              <span style="font-size:20px; font-weight:600; letter-spacing:-.02em;">Settings</span>
+            </div>
+            <div style="padding:20px 24px 0; display:flex; flex-direction:column; gap:10px;">
+              <div style="background:#FFFFFF; border:1px solid #E4DED1; border-radius:16px; overflow:hidden;">
+                <div style="padding:14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #EFEADD;">
+                  <span style="display:flex; flex-direction:column;"><span style="font-size:15px; font-weight:500;">This device is called</span><span style="font-size:12.5px; color:#8C8477;">{{ deviceName }}</span></span>
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8C8477" stroke-width="2" stroke-linecap="square"><path d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div style="padding:14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #EFEADD;">
+                  <span style="display:flex; flex-direction:column;"><span style="font-size:15px; font-weight:500;">Received files go to</span><span style="font-size:12.5px; color:#8C8477;">Downloads/Sharely · 41 GB free</span></span>
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8C8477" stroke-width="2" stroke-linecap="square"><path d="M9 5l7 7-7 7"></path></svg>
+                </div>
+                <div style="padding:14px; display:flex; align-items:center; justify-content:space-between;">
+                  <span style="display:flex; flex-direction:column;"><span style="font-size:15px; font-weight:500;">Ask before accepting</span><span style="font-size:12.5px; color:#8C8477;">Off means anyone nearby can drop files here</span></span>
+                  <span style="width:46px; height:28px; border-radius:14px; background:#C33C15; padding:3px; display:flex; justify-content:flex-end; align-items:center; flex:none;"><span style="width:22px; height:22px; border-radius:50%; background:#FFF6F2;"></span></span>
+                </div>
+              </div>
+              <div style="background:#FFFFFF; border:1px solid #E4DED1; border-radius:16px; padding:14px; display:flex; align-items:center; justify-content:space-between;">
+                <span style="display:flex; flex-direction:column;"><span style="font-size:15px; font-weight:500;">Language</span><span style="font-size:12.5px; color:#8C8477;">English · <span style="font-family:'Anek Bangla',sans-serif;">বাংলা</span></span></span>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8C8477" stroke-width="2" stroke-linecap="square"><path d="M9 5l7 7-7 7"></path></svg>
+              </div>
+              <span style="font-size:12.5px; color:#8C8477; padding:4px 2px; line-height:1.5;">Sharely has no account and no server. Nothing you send is ever uploaded.</span>
+            </div>
+            <div style="flex:1;"></div>
+          </div>
+        </sc-if>
+
+      </div>
+      <span style="font-family:'Martian Mono',monospace; font-size:11px; color:#6B6459;">Live · home → hub → picker → review → sending → sent · incoming · history · settings</span>
+    </div>
+
+    <!-- ===== BRAND + ICONS ===== -->
+    <div id="2b" style="width:560px; display:flex; flex-direction:column; gap:22px;">
+      <div style="display:flex; align-items:baseline; gap:14px;">
+        <span style="font-family:'Martian Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.08em; background:#14120F; color:#F4F1EA; padding:5px 9px; border-radius:5px;">2b</span>
+        <span style="font-size:17px; font-weight:600;">Logo &amp; icon set</span>
+      </div>
+
+      <div style="background:#F4F1EA; border:1px solid #E4DED1; border-radius:24px; padding:34px; display:flex; flex-direction:column; box-shadow:0 20px 50px -30px rgba(20,18,15,.35);">
+        <div style="display:flex; align-items:center; gap:20px; padding-bottom:26px; border-bottom:1px solid #E4DED1;">
+          <span style="width:88px; height:88px; border-radius:24px; background:linear-gradient(160deg,#211E19,#14120F); display:grid; place-items:center; box-shadow:0 6px 0 #C33C15, 0 22px 34px -18px rgba(20,18,15,.8); flex:none;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#F4F1EA" stroke-width="2" stroke-linecap="square"><path d="M4 9h11M11 5l4 4-4 4"></path><path d="M20 15H9M13 19l-4-4 4-4"></path></svg>
+          </span>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:40px; font-weight:700; letter-spacing:-.045em; line-height:1;">Sharely</span>
+            <span style="font-size:14.5px; color:#6B6459;">Two arrows crossing — one out, one back. A handoff, not a broadcast.</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:14px; align-items:center; padding:22px 0 0; flex-wrap:wrap;">
+          <span style="width:52px; height:52px; border-radius:14px; background:#14120F; display:grid; place-items:center;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F4F1EA" stroke-width="2.2" stroke-linecap="square"><path d="M4 9h11M11 5l4 4-4 4"></path><path d="M20 15H9M13 19l-4-4 4-4"></path></svg></span>
+          <span style="width:52px; height:52px; border-radius:14px; background:#C33C15; display:grid; place-items:center;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFF6F2" stroke-width="2.2" stroke-linecap="square"><path d="M4 9h11M11 5l4 4-4 4"></path><path d="M20 15H9M13 19l-4-4 4-4"></path></svg></span>
+          <span style="width:52px; height:52px; border-radius:14px; background:#F4F1EA; border:1px solid #DCD5C7; display:grid; place-items:center;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="2.2" stroke-linecap="square"><path d="M4 9h11M11 5l4 4-4 4"></path><path d="M20 15H9M13 19l-4-4 4-4"></path></svg></span>
+          <span style="width:34px; height:34px; border-radius:9px; background:#14120F; display:grid; place-items:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#F4F1EA" stroke-width="2.6" stroke-linecap="square"><path d="M4 9h11M11 5l4 4-4 4"></path><path d="M20 15H9M13 19l-4-4 4-4"></path></svg></span>
+          <span style="font-size:13px; color:#6B6459; flex:1; min-width:180px;">App icon, monochrome, light lockup, and 34px minimum — the mark holds at every size because it's two strokes.</span>
+        </div>
+      </div>
+
+      <div style="background:#F4F1EA; border:1px solid #E4DED1; border-radius:24px; padding:30px 34px 34px; display:flex; flex-direction:column; gap:18px; box-shadow:0 20px 50px -30px rgba(20,18,15,.35);">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <span style="font-family:'Martian Mono',monospace; font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#8C8477;">Icons — 24px grid, 1.7 stroke, square caps</span>
+          <span style="font-size:13.5px; color:#4A443A;">Drawn flat and blunt like postal marks. No rounded caps, no duotone, no filled variants — the only filled shape in the app is a confirmation.</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:16px 10px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M12 20V5M6 11l6-6 6 6"></path></svg><span style="font-size:10.5px; color:#6B6459;">send</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M12 4v15M6 13l6 6 6-6"></path></svg><span style="font-size:10.5px; color:#6B6459;">receive</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 16l5-4 4 3 3-2 6 4"></path><circle cx="15" cy="9" r="1.4"></circle></svg><span style="font-size:10.5px; color:#6B6459;">photos</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 11l5-3v8l-5-3z"></path></svg><span style="font-size:10.5px; color:#6B6459;">video</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M13 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9z"></path><path d="M13 3v6h6"></path></svg><span style="font-size:10.5px; color:#6B6459;">file</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M3 7h6l2 2h10v10H3z"></path></svg><span style="font-size:10.5px; color:#6B6459;">folder</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></svg><span style="font-size:10.5px; color:#6B6459;">apps</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M5 6h14M5 11h14M5 16h8"></path></svg><span style="font-size:10.5px; color:#6B6459;">text</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><rect x="7" y="3" width="10" height="18" rx="2"></rect><path d="M10 18h4"></path></svg><span style="font-size:10.5px; color:#6B6459;">phone</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><rect x="3" y="5" width="18" height="11"></rect><path d="M2 19h20"></path></svg><span style="font-size:10.5px; color:#6B6459;">laptop</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M3 9a13 13 0 0 1 18 0"></path><path d="M6.5 12.5a8.5 8.5 0 0 1 11 0"></path><path d="M10 16a4.5 4.5 0 0 1 4 0"></path><path d="M12 19h.01"></path></svg><span style="font-size:10.5px; color:#6B6459;">wi-fi</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><rect x="4" y="4" width="6" height="6"></rect><rect x="14" y="4" width="6" height="6"></rect><rect x="4" y="14" width="6" height="6"></rect><path d="M14 14h3v3M20 17v3h-3"></path></svg><span style="font-size:10.5px; color:#6B6459;">qr</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M12 7v5l4 2"></path><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 4v4h4"></path></svg><span style="font-size:10.5px; color:#6B6459;">history</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M12 4l2.4 5 5.6.7-4 3.9 1 5.4-5-2.7-5 2.7 1-5.4-4-3.9 5.6-.7z"></path></svg><span style="font-size:10.5px; color:#6B6459;">favourite</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><rect x="5" y="10" width="14" height="10" rx="1"></rect><path d="M8.5 10V7a3.5 3.5 0 0 1 7 0v3"></path></svg><span style="font-size:10.5px; color:#6B6459;">pin</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><circle cx="12" cy="12" r="3"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"></path></svg><span style="font-size:10.5px; color:#6B6459;">settings</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M5 13l4 4 10-10"></path></svg><span style="font-size:10.5px; color:#6B6459;">done</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M6 6l12 12M18 6L6 18"></path></svg><span style="font-size:10.5px; color:#6B6459;">cancel</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C33C15" stroke-width="1.7" stroke-linecap="square"><path d="M12 8v5M12 16h.01"></path><path d="M12 3l9 17H3z"></path></svg><span style="font-size:10.5px; color:#6B6459;">warn</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14120F" stroke-width="1.7" stroke-linecap="square"><path d="M4 12h16M14 6l6 6-6 6"></path></svg><span style="font-size:10.5px; color:#6B6459;">next</span></div>
+        </div>
+      </div>
+
+      <div style="background:#14120F; color:#EDE6D8; border-radius:24px; padding:30px 34px 34px; display:flex; flex-direction:column; gap:14px;">
+        <span style="font-family:'Martian Mono',monospace; font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#9C9384;">Where the depth went</span>
+        <span style="font-size:15px; line-height:1.6; color:#DDD5C4; text-wrap:pretty;">One dimensional moment: the parcel flight on Sending, and the fanned stack with the stamp on Sent. Files are physical cards with a lit top edge, a cast shadow, and a slight rotation as they leave — a perspective transform over flat assets, which is what Flutter can actually draw. Everywhere else stays at one hairline and a 1px shadow. Buttons get a 4px hard bottom edge instead of a blur, so tapping feels like pressing a real key.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;deviceName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Rafi's Pixel 8&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;isScanning&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;quickSave&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'home', pct: 0, sel: { 0: true, 3: true, 6: true } };
+
+  files = [
+    { name: 'IMG_4821.HEIC', size: '4.2 MB' },
+    { name: 'Cox_Bazar_sunset.mp4', size: '162.8 MB' },
+    { name: 'IMG_4903.HEIC', size: '17.2 MB' }
+  ];
+
+  go = (screen) => { if (screen !== 'sending') clearInterval(this.t); this.setState({ screen }); };
+
+  startSend = () => {
+    clearInterval(this.t);
+    this.setState({ screen: 'sending', pct: 0 });
+    const t0 = Date.now();
+    this.t = setInterval(() => {
+      const p = Math.min(100, (Date.now() - t0) / 4200 * 100);
+      this.setState({ pct: p });
+      if (p >= 100) { clearInterval(this.t); setTimeout(() => this.setState({ screen: 'done' }), 420); }
+    }, 70);
+  };
+
+  componentWillUnmount() { clearInterval(this.t); }
+
+  renderVals() {
+    const s = this.state.screen;
+    const sel = this.state.sel;
+    const count = Object.keys(sel).filter(k => sel[k]).length;
+    const p = this.state.pct;
+    const done = p * 184.2 / 100;
+    const rowPct = (i) => Math.max(0, Math.min(100, (p - i * 24) * 2.6));
+    const rowState = (i) => { const v = rowPct(i); return v >= 100 ? 'done' : v <= 0 ? 'queued' : Math.round(v) + '%'; };
+
+    return {
+      deviceName: this.props.deviceName ?? "Rafi's Pixel 8",
+      statusLabel: (this.props.quickSave ?? false) ? 'Quick Save on' : 'Ready to receive',
+      scanLabel: (this.props.isScanning ?? true) ? 'Still looking…' : '3 found',
+
+      onHome: s === 'home', onHub: s === 'hub', onPhotos: s === 'photos', onReview: s === 'review',
+      onSending: s === 'sending', onDone: s === 'done', onIncoming: s === 'incoming',
+      onHistory: s === 'history', onSettings: s === 'settings',
+
+      goHome: () => this.go('home'), goHub: () => this.go('hub'), goPhotos: () => this.go('photos'),
+      goReview: () => this.go('review'), goIncoming: () => this.go('incoming'),
+      goHistory: () => this.go('history'), goSettings: () => this.go('settings'),
+      goDone: () => this.go('done'), startSend: this.startSend,
+
+      devices: [
+        { name: "Rafi's MacBook", meta: 'Laptop · macOS · same Wi-Fi', link: 'Strong', fav: true, isLaptop: true, pick: () => this.go('hub') },
+        { name: "Nusrat's Galaxy", meta: 'Phone · Android · same Wi-Fi', link: 'Good', fav: false, isPhone: true, pick: () => this.go('hub') },
+        { name: 'Workshop PC', meta: 'Desktop · Windows · weak link', link: 'Weak', fav: false, isDesktop: true, pick: () => this.go('hub') }
+      ],
+
+      photos: Array.from({ length: 12 }, (_, i) => ({
+        size: ['4.2 MB', '2.8 MB', '162 MB', '3.1 MB', '5.4 MB', '1.9 MB', '17.2 MB', '2.2 MB', '8.6 MB', '4.4 MB', '3.7 MB', '11.1 MB'][i],
+        sel: !!sel[i],
+        toggle: () => this.setState(st => ({ sel: Object.assign({}, st.sel, { [i]: !st.sel[i] }) }))
+      })),
+
+      picked: this.files.map((f, i) => Object.assign({}, f, { remove: () => this.go('photos') })),
+      countLabel: count === 0 ? 'Nothing picked yet' : count + (count === 1 ? ' item' : ' items'),
+      sizeLabel: count === 0 ? '0 MB' : '184.2 MB total',
+
+      pct: Math.round(p),
+      speed: (11.4 + (Math.round(p * 3) % 7) * 0.42).toFixed(1) + ' MB/s',
+      eta: (184.2 - done).toFixed(1) + ' MB left',
+      rows: this.files.map((f, i) => ({ name: f.name, pct: rowPct(i), state: rowState(i) })),
+
+      history: [
+        { title: "Sent to Rafi's MacBook", meta: '3 files · 184.2 MB · 14.6 s', state: 'Sent' },
+        { title: "From Nusrat's Galaxy", meta: '18 files · 62.4 MB · 9.1 s', state: 'Received' },
+        { title: 'Sent to Workshop PC', meta: '1 file · 812 MB · 2 m 14 s', state: 'Sent' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

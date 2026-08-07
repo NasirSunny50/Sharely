@@ -1,0 +1,11 @@
+# Test-tree lint overrides. Inherits the root config, then relaxes a couple of
+# rules that are noise in test code (fixture maps read clearer without `const`,
+# and spelling out default arguments documents intent in assertions).
+include: ../analysis_options.yaml
+
+linter:
+  rules:
+    prefer_const_literals_to_create_immutables: false
+    prefer_const_constructors: false
+    avoid_redundant_argument_values: false
+    cascade_invocations: false
