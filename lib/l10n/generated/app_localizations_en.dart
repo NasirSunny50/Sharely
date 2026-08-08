@@ -396,4 +396,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stateDiskFull => 'Storage full';
+
+  @override
+  String get onbPermTitle => 'A couple of permissions';
+
+  @override
+  String get onbPermBody =>
+      'Sharely only asks for what it needs to move files on your own network.';
+
+  @override
+  String get permNotifications => 'Notifications';
+
+  @override
+  String get permNotificationsWhy =>
+      'So you know when someone sends you files.';
+
+  @override
+  String get permNearby => 'Nearby devices';
+
+  @override
+  String get permNearbyWhy =>
+      'So Sharely can find other devices on your Wi-Fi.';
+
+  @override
+  String get permCamera => 'Camera';
+
+  @override
+  String get permCameraWhy => 'Only used to scan a QR code.';
+
+  @override
+  String get permGrant => 'Allow';
+
+  @override
+  String get permGranted => 'Allowed';
+
+  @override
+  String get permOpenSettings => 'Open settings';
+
+  @override
+  String get permCameraNeeded => 'Camera access is needed to scan a QR code.';
 }

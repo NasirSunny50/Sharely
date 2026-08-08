@@ -6,6 +6,7 @@ import 'package:sharely/design/components.dart';
 import 'package:sharely/design/tokens.dart';
 import 'package:sharely/features/settings/settings_controller.dart';
 import 'package:sharely/l10n/generated/app_localizations.dart';
+import 'package:sharely/platform/permissions.dart';
 
 /// Onboarding — 4 beats: welcome, name this device, permissions, how it works.
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -65,11 +66,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   body: l.homePrivacyLine,
                 ),
                 _NameBeat(controller: _nameController),
-                _Beat(
-                  icon: Icons.wifi_tethering,
-                  title: l.settingsNetwork,
-                  body: l.homeNothingFoundHint,
-                ),
+                const _PermissionsBeat(),
                 _Beat(
                   icon: Icons.bolt,
                   title: l.homeSendSomething,
@@ -149,6 +146,134 @@ class _Beat extends StatelessWidget {
           Text(body, style: AppText.body.copyWith(color: p.muted)),
         ],
       ),
+    );
+  }
+}
+
+/// The Permissions beat — explains each permission in the user's terms, then
+/// fires the real OS dialogs and reflects what was granted.
+class _PermissionsBeat extends StatefulWidget {
+  const _PermissionsBeat();
+
+  @override
+  State<_PermissionsBeat> createState() => _PermissionsBeatState();
+}
+
+class _PermissionsBeatState extends State<_PermissionsBeat> {
+  static const _service = PermissionsService();
+  Map<SharelyPermission, bool> _granted = const {};
+  bool _requesting = false;
+
+  Future<void> _requestAll() async {
+    setState(() => _requesting = true);
+    final result = await _service.requestOnboarding();
+    if (mounted) {
+      setState(() {
+        _granted = result;
+        _requesting = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = context.palette;
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.huge),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l.onbPermTitle,
+              style: AppText.titleLarge.copyWith(color: p.ink)),
+          const SizedBox(height: AppSpacing.sm),
+          Text(l.onbPermBody, style: AppText.body.copyWith(color: p.muted)),
+          const SizedBox(height: AppSpacing.xl),
+          _PermRow(
+            icon: Icons.notifications_outlined,
+            title: l.permNotifications,
+            why: l.permNotificationsWhy,
+            granted: _granted[SharelyPermission.notifications],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          _PermRow(
+            icon: Icons.wifi_tethering,
+            title: l.permNearby,
+            why: l.permNearbyWhy,
+            granted: _granted[SharelyPermission.nearbyDevices],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          _PermRow(
+            icon: Icons.photo_camera_outlined,
+            title: l.permCamera,
+            why: l.permCameraWhy,
+            granted: null, // asked at point of use (opening the scanner)
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          if (_granted.isEmpty)
+            SizedBox(
+              width: double.infinity,
+              child: PrimaryButton(
+                label: l.permGrant,
+                onPressed: _requesting ? null : _requestAll,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PermRow extends StatelessWidget {
+  const _PermRow({
+    required this.icon,
+    required this.title,
+    required this.why,
+    required this.granted,
+  });
+  final IconData icon;
+  final String title;
+  final String why;
+  final bool? granted;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final l = AppLocalizations.of(context);
+    return Row(
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: p.cardSunken,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+          ),
+          child: Icon(icon, color: p.inkSecondary, size: 22),
+        ),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: AppText.bodyLarge.copyWith(color: p.ink)),
+              Text(why,
+                  style: AppText.caption.copyWith(color: p.muted),
+                  maxLines: 2),
+            ],
+          ),
+        ),
+        if (granted == true)
+          Row(
+            children: [
+              Icon(Icons.check_circle, color: p.success, size: 18),
+              const SizedBox(width: AppSpacing.xs),
+              Text(l.permGranted,
+                  style: AppText.caption.copyWith(color: p.successText)),
+            ],
+          ),
+      ],
     );
   }
 }

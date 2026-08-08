@@ -149,5 +149,18 @@
 
   "stateNoWifi": "No Wi-Fi",
   "statePermissionDenied": "Permission needed",
-  "stateDiskFull": "Storage full"
+  "stateDiskFull": "Storage full",
+
+  "onbPermTitle": "A couple of permissions",
+  "onbPermBody": "Sharely only asks for what it needs to move files on your own network.",
+  "permNotifications": "Notifications",
+  "permNotificationsWhy": "So you know when someone sends you files.",
+  "permNearby": "Nearby devices",
+  "permNearbyWhy": "So Sharely can find other devices on your Wi-Fi.",
+  "permCamera": "Camera",
+  "permCameraWhy": "Only used to scan a QR code.",
+  "permGrant": "Allow",
+  "permGranted": "Allowed",
+  "permOpenSettings": "Open settings",
+  "permCameraNeeded": "Camera access is needed to scan a QR code."
 }

@@ -6,6 +6,8 @@
 	<true/>
 	<!-- Sharely networking (see PROMPT.md §8). Local network usage is explained
 	     in the user's terms; Bonjour advertises/browses the LocalSend service. -->
+	<key>NSCameraUsageDescription</key>
+	<string>Sharely uses the camera only to scan a QR code so you can connect to another device.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Sharely finds nearby devices on your Wi-Fi so you can send and receive files. Nothing ever leaves your network.</string>
 	<key>NSBonjourServices</key>

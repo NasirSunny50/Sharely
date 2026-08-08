@@ -781,6 +781,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Storage full'**
   String get stateDiskFull;
+
+  /// No description provided for @onbPermTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A couple of permissions'**
+  String get onbPermTitle;
+
+  /// No description provided for @onbPermBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharely only asks for what it needs to move files on your own network.'**
+  String get onbPermBody;
+
+  /// No description provided for @permNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get permNotifications;
+
+  /// No description provided for @permNotificationsWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'So you know when someone sends you files.'**
+  String get permNotificationsWhy;
+
+  /// No description provided for @permNearby.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby devices'**
+  String get permNearby;
+
+  /// No description provided for @permNearbyWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'So Sharely can find other devices on your Wi-Fi.'**
+  String get permNearbyWhy;
+
+  /// No description provided for @permCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get permCamera;
+
+  /// No description provided for @permCameraWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Only used to scan a QR code.'**
+  String get permCameraWhy;
+
+  /// No description provided for @permGrant.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get permGrant;
+
+  /// No description provided for @permGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed'**
+  String get permGranted;
+
+  /// No description provided for @permOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get permOpenSettings;
+
+  /// No description provided for @permCameraNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is needed to scan a QR code.'**
+  String get permCameraNeeded;
 }
 
 class _AppLocalizationsDelegate

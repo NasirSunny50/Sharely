@@ -5,6 +5,8 @@ import 'package:sharely/design/components.dart';
 import 'package:sharely/design/tokens.dart';
 import 'package:sharely/l10n/generated/app_localizations.dart';
 
+final _ipInHost = RegExp(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})');
+
 /// Screen 8 — manual connect (IP entry / QR), the escape hatch for hostile
 /// networks where auto-discovery fails.
 class ManualConnectScreen extends StatefulWidget {
@@ -21,6 +23,14 @@ class _ManualConnectScreenState extends State<ManualConnectScreen> {
   void dispose() {
     _ip.dispose();
     super.dispose();
+  }
+
+  Future<void> _scan() async {
+    final result = await context.push<String>('/scan');
+    if (result == null || !mounted) return;
+    // A scanned value can be a raw IP or a browser-mode URL; pull the IP out.
+    final match = _ipInHost.firstMatch(result);
+    setState(() => _ip.text = match?.group(1) ?? result);
   }
 
   @override
@@ -57,6 +67,11 @@ class _ManualConnectScreenState extends State<ManualConnectScreen> {
                       borderSide: BorderSide(color: p.border),
                     ),
                   ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                SecondaryButton(
+                  label: l.manualConnectTitle,
+                  onPressed: _scan,
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 PrimaryButton(

@@ -132,5 +132,18 @@
 
   "stateNoWifi": "Wi-Fi নেই",
   "statePermissionDenied": "অনুমতি দরকার",
-  "stateDiskFull": "স্টোরেজ ভর্তি"
+  "stateDiskFull": "স্টোরেজ ভর্তি",
+
+  "onbPermTitle": "কয়েকটা অনুমতি দরকার",
+  "onbPermBody": "Sharely শুধু আপনার নিজের নেটওয়ার্কে ফাইল আদান-প্রদানের জন্য যতটুকু দরকার ততটুকুই চায়।",
+  "permNotifications": "নোটিফিকেশন",
+  "permNotificationsWhy": "কেউ ফাইল পাঠালে যেন জানতে পারেন।",
+  "permNearby": "কাছের ডিভাইস",
+  "permNearbyWhy": "যেন Sharely আপনার Wi-Fi-তে অন্য ডিভাইস খুঁজে পায়।",
+  "permCamera": "ক্যামেরা",
+  "permCameraWhy": "শুধু QR কোড স্ক্যান করতে ব্যবহার হয়।",
+  "permGrant": "অনুমতি দিন",
+  "permGranted": "দেওয়া হয়েছে",
+  "permOpenSettings": "সেটিংস খুলুন",
+  "permCameraNeeded": "QR কোড স্ক্যান করতে ক্যামেরার অনুমতি দরকার।"
 }

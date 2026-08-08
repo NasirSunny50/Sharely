@@ -396,4 +396,42 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get stateDiskFull => 'স্টোরেজ ভর্তি';
+
+  @override
+  String get onbPermTitle => 'কয়েকটা অনুমতি দরকার';
+
+  @override
+  String get onbPermBody =>
+      'Sharely শুধু আপনার নিজের নেটওয়ার্কে ফাইল আদান-প্রদানের জন্য যতটুকু দরকার ততটুকুই চায়।';
+
+  @override
+  String get permNotifications => 'নোটিফিকেশন';
+
+  @override
+  String get permNotificationsWhy => 'কেউ ফাইল পাঠালে যেন জানতে পারেন।';
+
+  @override
+  String get permNearby => 'কাছের ডিভাইস';
+
+  @override
+  String get permNearbyWhy =>
+      'যেন Sharely আপনার Wi-Fi-তে অন্য ডিভাইস খুঁজে পায়।';
+
+  @override
+  String get permCamera => 'ক্যামেরা';
+
+  @override
+  String get permCameraWhy => 'শুধু QR কোড স্ক্যান করতে ব্যবহার হয়।';
+
+  @override
+  String get permGrant => 'অনুমতি দিন';
+
+  @override
+  String get permGranted => 'দেওয়া হয়েছে';
+
+  @override
+  String get permOpenSettings => 'সেটিংস খুলুন';
+
+  @override
+  String get permCameraNeeded => 'QR কোড স্ক্যান করতে ক্যামেরার অনুমতি দরকার।';
 }
