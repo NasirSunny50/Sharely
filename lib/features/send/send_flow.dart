@@ -14,6 +14,7 @@ import 'package:sharely/features/history/history_store.dart';
 import 'package:sharely/features/network/network_controller.dart';
 import 'package:sharely/features/send/widgets/handoff.dart';
 import 'package:sharely/l10n/generated/app_localizations.dart';
+import 'package:sharely/platform/wake.dart';
 import 'package:sharely/protocol/client/send_service.dart';
 import 'package:sharely/protocol/discovery/discovered_device.dart';
 import 'package:sharely/protocol/models/file_dto.dart';
@@ -87,6 +88,7 @@ class _SendFlowState extends ConsumerState<SendFlow> {
       return;
     }
     setState(() => _step = _Step.sending);
+    await WakeGuard.instance.acquire(); // keep the screen on while sending
 
     final sub = service.progress.listen((pr) {
       if (mounted) setState(() => _progress = pr);
@@ -110,6 +112,7 @@ class _SendFlowState extends ConsumerState<SendFlow> {
       files: outgoing,
     );
     await sub.cancel();
+    await WakeGuard.instance.release();
     if (!mounted) return;
 
     // Record the outcome in history.

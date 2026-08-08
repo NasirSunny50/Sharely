@@ -11,6 +11,7 @@ import 'package:sharely/features/favorites/favourites_store.dart';
 import 'package:sharely/features/history/history_store.dart';
 import 'package:sharely/features/settings/settings_controller.dart';
 import 'package:sharely/platform/notifications.dart';
+import 'package:sharely/platform/wake.dart';
 import 'package:sharely/protocol/client/send_service.dart';
 import 'package:sharely/protocol/discovery/discovered_device.dart';
 import 'package:sharely/protocol/discovery/discovery_service.dart';
@@ -119,6 +120,7 @@ class NetworkController extends StateNotifier<NetworkState> {
   StreamSubscription<int>? _browserConnSub;
 
   Completer<Set<String>>? _pendingAccept;
+  bool _receiveWakeHeld = false;
   StreamSubscription<List<DiscoveredDevice>>? _devicesSub;
   StreamSubscription<Session>? _receiveSub;
 
@@ -190,6 +192,16 @@ class NetworkController extends StateNotifier<NetworkState> {
       );
       _receiveSub = _receiveManager!.sessionUpdates.listen((session) {
         state = state.copyWith(receiveSession: session);
+        // Keep the screen awake while receiving; toggle only on the edge so the
+        // reference count stays balanced across many progress updates.
+        final active = session.state == SessionState.active;
+        if (active && !_receiveWakeHeld) {
+          _receiveWakeHeld = true;
+          unawaited(WakeGuard.instance.acquire());
+        } else if (!active && _receiveWakeHeld) {
+          _receiveWakeHeld = false;
+          unawaited(WakeGuard.instance.release());
+        }
         if (session.state == SessionState.completed) {
           final accepted =
               session.files.values.where((f) => f.accepted).toList();
