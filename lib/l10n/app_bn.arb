@@ -145,5 +145,9 @@
   "permGrant": "অনুমতি দিন",
   "permGranted": "দেওয়া হয়েছে",
   "permOpenSettings": "সেটিংস খুলুন",
-  "permCameraNeeded": "QR কোড স্ক্যান করতে ক্যামেরার অনুমতি দরকার।"
+  "permCameraNeeded": "QR কোড স্ক্যান করতে ক্যামেরার অনুমতি দরকার।",
+
+  "logTitle": "কার্যকলাপের লগ",
+  "logEmpty": "এখনও কিছু লগ হয়নি।",
+  "logOpen": "কার্যকলাপের লগ দেখুন"
 }

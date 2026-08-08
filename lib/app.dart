@@ -12,6 +12,7 @@ import 'package:sharely/features/receive/browser_mode_screen.dart';
 import 'package:sharely/features/receive/incoming_overlay.dart';
 import 'package:sharely/features/security/pin_screen.dart';
 import 'package:sharely/features/send/send_flow.dart';
+import 'package:sharely/features/settings/log_viewer_screen.dart';
 import 'package:sharely/features/settings/settings_controller.dart';
 import 'package:sharely/features/settings/settings_screen.dart';
 import 'package:sharely/features/settings/troubleshooting_screen.dart';
@@ -55,6 +56,7 @@ class SharelyApp extends ConsumerWidget {
             path: '/manual', builder: (c, s) => const ManualConnectScreen()),
         GoRoute(path: '/scan', builder: (c, s) => const QrScanScreen()),
         GoRoute(path: '/browser', builder: (c, s) => const BrowserModeScreen()),
+        GoRoute(path: '/logs', builder: (c, s) => const LogViewerScreen()),
         GoRoute(path: '/pin', builder: (c, s) => const PinScreen()),
       ],
     );

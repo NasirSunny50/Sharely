@@ -21,6 +21,26 @@ class TroubleshootingScreen extends StatelessWidget {
           _Item(icon: Icons.wifi_password, text: l.troubleshootGuestWifi),
           _Item(icon: Icons.vpn_lock, text: l.troubleshootVpn),
           _Item(icon: Icons.shield_outlined, text: l.troubleshootFirewall),
+          const SizedBox(height: AppSpacing.sm),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenH),
+            child: AppCard(
+              onTap: () => context.push('/logs'),
+              child: Row(
+                children: [
+                  Icon(Icons.receipt_long_outlined,
+                      color: context.palette.inkSecondary, size: 22),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Text(l.logOpen,
+                        style: AppText.body
+                            .copyWith(color: context.palette.ink)),
+                  ),
+                  Icon(Icons.chevron_right, color: context.palette.mutedLight),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

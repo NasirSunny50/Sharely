@@ -435,4 +435,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permCameraNeeded => 'Camera access is needed to scan a QR code.';
+
+  @override
+  String get logTitle => 'Activity log';
+
+  @override
+  String get logEmpty => 'Nothing logged yet.';
+
+  @override
+  String get logOpen => 'View activity log';
 }

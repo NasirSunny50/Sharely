@@ -162,5 +162,9 @@
   "permGrant": "Allow",
   "permGranted": "Allowed",
   "permOpenSettings": "Open settings",
-  "permCameraNeeded": "Camera access is needed to scan a QR code."
+  "permCameraNeeded": "Camera access is needed to scan a QR code.",
+
+  "logTitle": "Activity log",
+  "logEmpty": "Nothing logged yet.",
+  "logOpen": "View activity log"
 }

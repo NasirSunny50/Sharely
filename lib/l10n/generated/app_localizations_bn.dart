@@ -434,4 +434,13 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get permCameraNeeded => 'QR কোড স্ক্যান করতে ক্যামেরার অনুমতি দরকার।';
+
+  @override
+  String get logTitle => 'কার্যকলাপের লগ';
+
+  @override
+  String get logEmpty => 'এখনও কিছু লগ হয়নি।';
+
+  @override
+  String get logOpen => 'কার্যকলাপের লগ দেখুন';
 }

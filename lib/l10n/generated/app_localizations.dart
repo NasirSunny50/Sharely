@@ -853,6 +853,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Camera access is needed to scan a QR code.'**
   String get permCameraNeeded;
+
+  /// No description provided for @logTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity log'**
+  String get logTitle;
+
+  /// No description provided for @logEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet.'**
+  String get logEmpty;
+
+  /// No description provided for @logOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'View activity log'**
+  String get logOpen;
 }
 
 class _AppLocalizationsDelegate
