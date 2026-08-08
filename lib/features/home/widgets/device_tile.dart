@@ -11,12 +11,14 @@ class DeviceTile extends StatelessWidget {
     required this.device,
     required this.onTap,
     this.favourite = false,
+    this.onFavourite,
     super.key,
   });
 
   final DiscoveredDevice device;
   final VoidCallback onTap;
   final bool favourite;
+  final VoidCallback? onFavourite;
 
   IconData get _icon => switch (device.info.deviceType) {
         DeviceType.mobile => Icons.smartphone,
@@ -83,6 +85,16 @@ class DeviceTile extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.sm),
             _LinkBars(color: p.ink, dim: p.borderStrong),
+            if (onFavourite != null)
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: Icon(
+                  favourite ? Icons.star : Icons.star_outline,
+                  size: 20,
+                  color: favourite ? p.favText : p.mutedLight,
+                ),
+                onPressed: onFavourite,
+              ),
           ],
         ),
       ),

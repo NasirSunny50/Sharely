@@ -7,6 +7,8 @@ import 'package:network_info_plus/network_info_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sharely/core/logger.dart';
+import 'package:sharely/features/favorites/favourites_store.dart';
+import 'package:sharely/features/history/history_store.dart';
 import 'package:sharely/features/settings/settings_controller.dart';
 import 'package:sharely/platform/notifications.dart';
 import 'package:sharely/protocol/client/send_service.dart';
@@ -189,8 +191,23 @@ class NetworkController extends StateNotifier<NetworkState> {
       _receiveSub = _receiveManager!.sessionUpdates.listen((session) {
         state = state.copyWith(receiveSession: session);
         if (session.state == SessionState.completed) {
+          final accepted =
+              session.files.values.where((f) => f.accepted).toList();
           unawaited(NotificationService.instance
-              .showComplete(session.files.length, 'Downloads/Sharely'));
+              .showComplete(accepted.length, 'Downloads/Sharely'));
+          unawaited(_ref.read(historyStoreProvider).add(TransferRecord(
+                id: session.sessionId,
+                direction: HistoryDirection.received,
+                deviceName: session.remote.alias,
+                fileCount: accepted.length,
+                totalBytes:
+                    accepted.fold(0, (s, f) => s + f.file.size),
+                at: DateTime.now(),
+                success: true,
+                firstFileName: accepted.isEmpty
+                    ? null
+                    : accepted.first.file.fileName,
+              )));
         } else if (session.state == SessionState.failed) {
           unawaited(NotificationService.instance.showFailed('Transfer failed'));
         }
@@ -210,8 +227,13 @@ class NetworkController extends StateNotifier<NetworkState> {
     String remoteIp,
   ) async {
     final settings = _ref.read(settingsProvider);
-    // Quick Save / favourites auto-accept everything.
+    // Quick Save auto-accepts everything.
     if (settings.quickSave || !settings.askBeforeAccepting) {
+      return request.files.keys.toSet();
+    }
+    // A favourited device with auto-accept skips the prompt too.
+    final favourites = _ref.read(favouritesStoreProvider);
+    if (favourites.isAutoAccept(request.info.fingerprint)) {
       return request.files.keys.toSet();
     }
     final completer = Completer<Set<String>>();

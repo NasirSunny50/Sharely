@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sharely/design/app_palette.dart';
 import 'package:sharely/design/components.dart';
 import 'package:sharely/design/tokens.dart';
+import 'package:sharely/features/favorites/favourites_store.dart';
 import 'package:sharely/features/home/widgets/device_tile.dart';
 import 'package:sharely/features/home/widgets/discovery_field.dart';
 import 'package:sharely/features/network/network_controller.dart';
@@ -65,9 +66,24 @@ class HomeScreen extends ConsumerWidget {
                         const SizedBox(height: AppSpacing.md),
                     itemBuilder: (context, i) {
                       final d = net.devices[i];
-                      return DeviceTile(
-                        device: d,
-                        onTap: () => _pickDevice(context, d),
+                      final favourites = ref.watch(favouritesStoreProvider);
+                      return AnimatedBuilder(
+                        animation: favourites.changes,
+                        builder: (context, _) {
+                          final isFav =
+                              favourites.isFavourite(d.info.fingerprint);
+                          return DeviceTile(
+                            device: d,
+                            favourite: isFav,
+                            onFavourite: () => favourites.toggle(
+                              FavouriteDevice(
+                                fingerprint: d.info.fingerprint,
+                                alias: d.info.alias,
+                              ),
+                            ),
+                            onTap: () => _pickDevice(context, d),
+                          );
+                        },
                       );
                     },
                   ),

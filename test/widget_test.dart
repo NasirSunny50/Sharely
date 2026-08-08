@@ -5,6 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sharely/app.dart';
 import 'package:sharely/features/settings/settings_controller.dart';
 
+// The history/favourites stores are read lazily (only when devices/records
+// exist), so these boot tests don't need them wired — keeping the test free of
+// real Hive I/O, which would deadlock under testWidgets' fake-async zone.
 Future<Widget> _app(Map<String, Object> prefsValues) async {
   SharedPreferences.setMockInitialValues(prefsValues);
   final prefs = await SharedPreferences.getInstance();

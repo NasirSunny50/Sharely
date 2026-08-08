@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_selector/file_selector.dart';
@@ -9,6 +10,7 @@ import 'package:sharely/core/format.dart';
 import 'package:sharely/design/app_palette.dart';
 import 'package:sharely/design/components.dart';
 import 'package:sharely/design/tokens.dart';
+import 'package:sharely/features/history/history_store.dart';
 import 'package:sharely/features/network/network_controller.dart';
 import 'package:sharely/features/send/widgets/handoff.dart';
 import 'package:sharely/l10n/generated/app_localizations.dart';
@@ -109,6 +111,19 @@ class _SendFlowState extends ConsumerState<SendFlow> {
     );
     await sub.cancel();
     if (!mounted) return;
+
+    // Record the outcome in history.
+    unawaited(ref.read(historyStoreProvider).add(TransferRecord(
+          id: '${DateTime.now().microsecondsSinceEpoch}',
+          direction: HistoryDirection.sent,
+          deviceName: target.info.alias,
+          fileCount: _files.length,
+          totalBytes: _totalBytes,
+          at: DateTime.now(),
+          success: result is SendSucceeded,
+          firstFileName: _files.isEmpty ? null : _files.first.name,
+        )));
+
     setState(() {
       if (result is SendSucceeded) {
         _step = _Step.complete;
